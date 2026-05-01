@@ -33,6 +33,63 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="css/user.css" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <style>
+    /* Play button overlay */
+    .game-play-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: url('images/rocket-soccer-derby.webp') center/cover no-repeat;
+    }
+    .game-play-overlay::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.45);
+    }
+    .play-btn-circle {
+      position: relative;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: rgba(242, 125, 12, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px rgba(242, 125, 12, 0.6), 0 8px 30px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: playPulse 2s ease-in-out infinite;
+    }
+    .play-btn-circle:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 60px rgba(242, 125, 12, 0.8), 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .play-btn-circle i {
+      font-size: 44px;
+      color: #fff;
+      margin-left: 6px;
+    }
+    .play-label {
+      position: relative;
+      text-align: center;
+    }
+    .play-label span {
+      display: block;
+      margin-top: 16px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      letter-spacing: 1px;
+    }
+    @keyframes playPulse {
+      0%, 100% { box-shadow: 0 0 40px rgba(242, 125, 12, 0.6), 0 8px 30px rgba(0,0,0,0.4); }
+      50% { box-shadow: 0 0 60px rgba(242, 125, 12, 0.9), 0 8px 40px rgba(0,0,0,0.5); }
+    }
+  </style>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
   <link rel="preconnect" href="https://23azostore.github.io" crossorigin>
@@ -112,25 +169,16 @@
       <div class="col-md-9">
         <div class="game-container">
           <div class="game-content" data-id="169">
-            <div id="allow_mobile_version"></div>
-            <!-- 
-                <div id="mobile-play" style="display: none;">
-          				<div class="mobile-thumb-play">
-          					<img src="#">
-          				</div>
-          				<div id="mobile-play-btn">
-          					<i class="bi bi-play-circle-fill"></i>
-          				</div>
-          			</div> -->
-
-
-
             <div class="game-iframe-container" id="game-player">
-              <div id="mobile-back-button" draggable="true">
+              <div id="game-play-overlay" class="game-play-overlay" onclick="startGame()">
+                <div class="play-label">
+                  <div class="play-btn-circle"><i class="bi bi-play-fill"></i></div>
+                  <span>PLAY NOW</span>
+                </div>
+              </div>
+              <div id="mobile-back-button" draggable="true" style="display:none;">
                 <i class="bi bi-x-circle-fill"></i>
               </div>
-              <iframe class="game-iframe" id="game-area" src="https://23azostore.github.io/s6/rocket-soccer-derby"
-                width="480" height="800" scrolling="none" frameborder="0" allowfullscreen></iframe>
             </div>
           </div>
 
@@ -682,6 +730,24 @@
               function customStartGame() {
                 document.getElementById('game-area').src = 'https://23azostore.github.io/s8/geometry-dash/';
                 document.getElementById('custom-play-overlay').style.display = 'none';
+              }
+            </script>
+            <script>
+              function startGame() {
+                var overlay = document.getElementById('game-play-overlay');
+                var container = document.getElementById('game-player');
+                overlay.style.display = 'none';
+                var iframe = document.createElement('iframe');
+                iframe.className = 'game-iframe';
+                iframe.id = 'game-area';
+                iframe.src = 'https://23azostore.github.io/s6/rocket-soccer-derby';
+                iframe.width = '480';
+                iframe.height = '800';
+                iframe.scrolling = 'none';
+                iframe.frameBorder = '0';
+                iframe.allowFullscreen = true;
+                container.appendChild(iframe);
+                document.getElementById('mobile-back-button').style.display = '';
               }
             </script>
             <script type="text/javascript" src="js/script.js"></script>
